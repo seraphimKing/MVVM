@@ -12,17 +12,20 @@
 			<p>你好的</p>
 			<span>{{poo}}</span>
 		</div>
-		<script type="text/javascript" src="js/myVue.js"></script>
-		<script type="text/javascript">
-			/*var app = new MyVue({
-				el: '#app',
-				data: {
-					foo: 'bar'
-				}
-			})
-			setTimeout(function(){
-				app.foo = 'bar-changed'
-			},3000)*/
-		</script>
 	</body>
+	<script type="text/javascript" src="js/myVue.js"></script>
+	<script type="text/javascript">
+		var vm = new MyVue({
+			el: "#app",
+			data: {
+				foo: 'bar',
+				poo: 'great'
+			}
+		})
+		var rep = vm.box
+		vm.repeat(rep)
+		setTimeout(function(){
+			vm.data['foo'] = 'bar_change'
+		},3000)
+	</script>
 </html>

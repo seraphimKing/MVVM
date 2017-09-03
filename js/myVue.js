@@ -1,4 +1,3 @@
-
 function observe(data) {
     if (!data || typeof data !== 'object') {
         return;
@@ -8,7 +7,6 @@ function observe(data) {
         defineReactive(data, key, data[key]);
     });
 };
-
 function defineReactive(data, key, val) {
     observe(val); // 监听子属性
     Object.defineProperty(data, key, {
@@ -18,9 +16,9 @@ function defineReactive(data, key, val) {
             return val;
         },
         set: function(newVal) {
-            console.log('监听值发生变化', val, ' --> ', newVal);
+            console.log('监听值发生变化', val, ' >> ', newVal);
             val = newVal;
-            vm.review()
+            vm.repeat(vm.box)
         }
     });
 }
@@ -30,31 +28,36 @@ function MyVue(options) {
 	this.box
 	this.creatFrage()
 	var data = this.data , me = this
-	/*Object.keys(data).forEach(function(key) {
-		me.watcher(key)
-	})*/
 	observe(data)
 }
 MyVue.prototype = {
-	review: function() {
-		var me = this
-		//查找html中的{{}},获取其中的值，如果跟对象中的值有相符合的，就将值渲染到页面中
-		/*var frag =  document.createDocumentFragment();
-		if(box) {
-			frag.appendChild(box)
-		}*/
-		//循环遍历box的子元素，如果找到{{}}，且内部元素在数据中有相应的键，用值替换
+	repeat: function(rep) {
+		if(rep.children.length) {
+			for(var i = 0; i< rep.children.length; i++) {
+				if(rep.children[i].children.length == 0) {
+					var text = rep.children[i].innerText	
+					var item = rep.children[i]
+					this.editor(text,item)
+				}
+				else {
+					this.repeat(rep.children[i])
+				}
+			}
+		}
+	},
+	editor: function(text,item) {
 		var reg = /\{\{(.*)\}\}/;
 		var reg2 = /\{|\}|\s/g;
-	 	[].slice.call(this.box.childNodes).forEach(function(node,index){
-	 		var text = node.textContent
-	 		if(reg.test(text)) {
-	 			text = text.replace(reg2,"")
-	 		}
-	 		if(me.data.hasOwnProperty(text)) {
-	 			me.box.childNodes[index].innerText = me.data[text];
-	 		}
-	 	})
+		if(reg.test(text)) {
+			text = text.replace(reg2,"")
+		}
+		if(item.hasAttributes('v-bind')) {
+			text = item.getAttribute("v-bind")
+		}
+		if(this.data.hasOwnProperty(text)) {
+			item.innerText = this.data[text];
+ 			item.setAttribute("v-bind",text)
+		}
 	},
 	creatFrage: function() {
 		//获取el中的元素
@@ -65,30 +68,4 @@ MyVue.prototype = {
 		}
 		this.box = box
 	}
-	/*watcher: function(key) {
-		var me = this
-		Object.defineProperty(me, key, {
-		    configurable: false,
-		    enumerable: true,
-		    get: function() {
-		        return me.data[key]
-		    },
-		    set: function(newVal) {
-		        me.review()
-		    }
-		})
-	}*/
 }
-
-var vm = new MyVue({
-	el: "#app",
-	data: {
-		foo: 'bar',
-		poo: 'great'
-	}
-})
-vm.review()
-
-setTimeout(function(){
-	vm.data['foo'] = 'bar_change'
-},3000)
