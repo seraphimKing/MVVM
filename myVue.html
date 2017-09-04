@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-	</head>
-	<body>
-		<div id="app">
-			<p>
-				<span>{{foo}}</span>
-			</p>
-			<p>你好的</p>
-			<span>{{poo}}</span>
-		</div>
-	</body>
-	<script type="text/javascript" src="js/myVue.js"></script>
-	<script type="text/javascript">
-		var vm = new MyVue({
-			el: "#app",
-			data: {
-				foo: 'bar',
-				poo: 'great'
-			}
-		})
-		setTimeout(function(){
-			vm.data['foo'] = 'bar_change'
-		},3000)
-	</script>
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+  </head>
+  <body>
+    <div id="app">
+      <p>
+        <span>{{foo}}</span>
+      </p>
+      <p>你好的</p>
+      <span>{{poo}}</span>
+    </div>
+  </body>
+  <script type="text/javascript" src="js/myVue.js"></script>
+  <script type="text/javascript">
+    var vm = new MyVue({
+      el: "#app",
+      data: {
+        foo: 'bar',
+        poo: 'great'
+      }
+    })
+    setTimeout(function() {
+      vm.data['foo'] = 'bar_change'
+    }, 3000)
+  </script>
+
 </html>
